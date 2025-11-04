@@ -29,14 +29,47 @@
       : "{{ '/objects/' | relative_url }}" + o.filename;
   }
 
+  function normUrl(src) {
+    if (!src) return src;
+    const isAbs = /^https?:\/\//i.test(src);
+    if (isAbs) return src;
+    // make relative paths work locally and on GitHub Pages
+    return '{{ "" | relative_url }}' + (src.startsWith("/") ? src : "/" + src);
+  }
+
   function getThumbHTML(o) {
     const fmt = getFormatFromFilename(o);
     const link = findFileLink(o);
     const title = getObjectTitle(o);
 
-    if (fmt === "image" && link) {
-      return `<img class="card-img-top" loading="lazy" src="${link}" alt="${title}">`;
+    // --- 新增：更稳的 cover 取值 ---
+    let coverRaw = (o.image_thumb || o.thumbnail || "").toString().trim();
+
+    // 如果只给了文件名，没有任何斜杠，就自动补你约定的缩略图目录
+    // 按你的项目改这个目录即可：
+    const DEFAULT_THUMB_DIR = "/assets/img/thumbnails";
+
+    if (
+      coverRaw &&
+      !/^https?:\/\//i.test(coverRaw) &&
+      !coverRaw.startsWith("/")
+    ) {
+      coverRaw = DEFAULT_THUMB_DIR.replace(/\/$/, "") + "/" + coverRaw;
     }
+
+    if (coverRaw) {
+      return `<img class="card-img-top" loading="lazy" src="${normUrl(
+        coverRaw
+      )}"
+             alt="${(title || "").replace(/"/g, "&quot;")}">`;
+    }
+    // --- 封面取值结束 ---
+
+    if (fmt === "image" && link) {
+      return `<img class="card-img-top" loading="lazy" src="${link}"
+             alt="${(title || "").replace(/"/g, "&quot;")}">`;
+    }
+
     const icon =
       fmt === "pdf"
         ? "icon-pdf"
@@ -45,12 +78,13 @@
         : fmt === "video"
         ? "icon-video"
         : "icon-default";
+
     return `
-      <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center text-muted" style="background:#f8f9fa;">
-        <svg class="bi" width="48" height="48" aria-hidden="true">
-          <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#${icon}" />
-        </svg>
-      </div>`;
+    <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center text-muted" style="background:#f8f9fa;">
+      <svg class="bi" width="48" height="48" aria-hidden="true">
+        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#${icon}" />
+      </svg>
+    </div>`;
   }
 
   function recordToCard(o) {
