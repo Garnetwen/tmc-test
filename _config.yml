@@ -20,12 +20,12 @@ source-code: https://github.com/CollectionBuilder/collectionbuilder-sheets
 # SITE SETTINGS
 #
 # title of site appears in banner
-title: TMC Test Web
+title: Tibetan Medical Cosmopolis
 # tagline, a short phrase that will appear throughout the site in the top banner
-tagline: testtesttest
+tagline: A Digital Archive of the Tibetan Medical Canons
 # description appears in meta tags and other locations
 # this description might appear in search result lists, keep around 160 characters max
-description: "testing description"
+description: "The Tibetan Medical Cosmopolis provides a trilingual archive of all texts published in the “Collection of Classical Tibetan Medical Texts” (Bod kyi gso ba rig pa’i gna’ dpe phyogs bsgrigs), a series edited by the Arura Group and published by the Minzu Publishing House in Beijing. Research for this project was generously supported by the New York University Fund for Research on China (2024–2026)."
 # creator of the digital collection, to appear in meta tags; we typically use our GitHub usernames but feel free to just use your name
 author: TMC
 
