@@ -53,3 +53,6 @@
   display_name: Latitude
 - field: longitude
   display_name: Longitude
+
+- field: subject
+  sort_name: Subject
